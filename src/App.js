@@ -2,7 +2,7 @@
 function App() {
   return (
     <h1 className='text-2xl bg-red-400'>
-      hello world
+      hello world!!
     </h1>
   );
 }

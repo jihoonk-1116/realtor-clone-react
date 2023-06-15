@@ -1,7 +1,12 @@
-import {useState} from 'react'
+import {useState} from "react"
 import {AiFillEyeInvisible, AiFillEye} from "react-icons/ai"
 import { Link } from 'react-router-dom';
-import OAuth from '../components/OAuth';
+import OAuth from "../components/OAuth";
+import {getAuth, createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
+import {db} from "../firebase";
+import { serverTimestamp, setDoc, doc } from "firebase/firestore";
+import { useNavigate } from "react-router";
+import {toast} from "react-toastify";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,11 +16,37 @@ export default function SignUp() {
     password: "",
   });
   const {name, email, password} = formData;
+  const navigate = useNavigate();
   function onChange(e){
     setFormData((prevState) => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }))
+  }
+  async function onSubmit(e){
+    e.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password); 
+      //promise function, so we have to use async and await
+      //because it takes time to receive the response from the API
+      //unless it waits, then userCredential var will be undefined object
+      const user = userCredential.user;
+      updateProfile(auth.currentUser, {
+        displayName : name
+      });
+      //Below code is to store user data into db collection as document 
+      const formDataCopy = {...formData};
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+
+      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      toast.success("Sign up was successful!");
+      navigate("/");
+
+    } catch (error) {
+      toast.error("Something went wrong with the registration");
+    }
   }
   return (
     <section>
@@ -26,7 +57,7 @@ export default function SignUp() {
           alt="key img" className="w-full rounded-2xl"></img>
         </div>
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
           <input 
               className="mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white border-gray-300
               rounded transition ease-in-out" 

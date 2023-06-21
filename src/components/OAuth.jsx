@@ -14,11 +14,11 @@ export default function OAuth() {
       const res = await signInWithPopup(auth, provider);
       const user = res.user;
 
-      const docRef = doc(db, "users", user.uid);
+      const docRef = doc(db, "users", user.uid); //db address, collection's name, key
       const docSnap = await getDoc(docRef);
 
       if(!docSnap.exists()){
-        await setDoc(docRef, {
+        await setDoc(docRef, { //key, object
           name: user.displayName,
           email: user.email,
           timestamp: serverTimestamp(),

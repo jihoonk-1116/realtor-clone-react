@@ -1,9 +1,11 @@
 import {useState} from "react";
+import {Link} from "react-router-dom";
 import {getAuth, updateProfile} from "firebase/auth";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { updateDoc, doc } from "firebase/firestore";
 import {db} from "../firebase";
+import {FcHome} from "react-icons/fc";
 
 export default function Profile() {
   const auth = getAuth();
@@ -64,23 +66,31 @@ export default function Profile() {
             <input type="email" id="email" value={name} disabled={!changeDetail} 
             className="mb-6 w-full px-4 py-2 text-xl text-gray-700 bg-white
             border border-gray-300 rounded transition ease-in-out"/>
-          </form>
-
-          <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg mb-6">
-            <p className="flex items-center">Do you want to change your name?
-            <span
-                  onClick={() => {
-                    changeDetail && onSubmit();
-                    setChangeDetail((prevState) => !prevState);
-                  }}
-                  className="text-red-600 hover:text-red-700 transition ease-in-out duration-200 ml-1 cursor-pointer"
+            <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg mb-6">
+              <p className="flex items-center">Do you want to change your name?
+                <span
+                    onClick={() => {
+                      changeDetail && onSubmit();
+                      setChangeDetail((prevState) => !prevState);
+                    }}
+                    className="text-red-600 hover:text-red-700 transition ease-in-out duration-200 ml-1 cursor-pointer"
                 >
-                  {changeDetail ? "Apply change" : "Edit"}
+                    {changeDetail ? "Apply change" : "Edit"}
                 </span>
-            </p>
-            <p onClick={onLogout}  className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out cursor-pointer">Sign out</p>
+              </p>
+              <p onClick={onLogout}  className="text-blue-600 hover:text-blue-800 transition duration-200 ease-in-out cursor-pointer">Sign out</p>
+            </div>
+          </form>
+          <button type="submit" 
+            className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium 
+              rounded shadow-md hover-bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800">
+            <Link to="/create-listing" className="flex justify-center items-center">
+              {/* justify-center is for placing item horizontally center and items-center is for vertically centering */}
+              <FcHome className="mr-2 text-3xl bg-red-200 rounded-full p-1 border-2"/> Sell or rent your home
+            </Link>
+            
+          </button>
           </div>
-        </div>
       </section>
     </>
   )

@@ -24,7 +24,8 @@ export default function Header() {
   }
 
   return (
-    <div className='bg-white border-b shadow-sm sticky top-0 z-50'>
+    <div className='bg-white border-b shadow-sm sticky top-0 z-40'> 
+     {/* the z index has been changed 50 to 40 after spinner was added */}
       {/* stick : stick the item somewhere wanted to be , add z index to ensure it to be the top */}
         <header className='flex justify-between items-center px-3 max-w-6xl mx-auto'>
           {/* px-3 padding 3px , max padding  */}

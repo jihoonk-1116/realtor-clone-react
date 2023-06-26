@@ -1,15 +1,18 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {Link} from "react-router-dom";
 import {getAuth, updateProfile} from "firebase/auth";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
-import { updateDoc, doc } from "firebase/firestore";
+import { updateDoc, doc, where, orderBy, getDocs, query, collection } from "firebase/firestore";
 import {db} from "../firebase";
 import {FcHome} from "react-icons/fc";
+import ListingItem from "../components/ListingItem";
 
 export default function Profile() {
   const auth = getAuth();
   const navigate = useNavigate();
+  const [listings, setListings] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [changeDetail, setChangeDetail] = useState(false);
   const [formData, setFormData] = useState({
     name:auth.currentUser.displayName,
@@ -44,6 +47,26 @@ export default function Profile() {
       toast.error("Could not update profile details")
     }
   }
+  useEffect(()=>{
+    async function fetchUserListings(){
+       const listingRef = collection(db, "listings");
+       const q = query(
+        listingRef, where("userRef", "==", auth.currentUser.uid),
+        orderBy("timestamp", "desc")
+       );
+       const querySnap = await getDocs(q);
+       let listings = [];
+       querySnap.forEach((doc)=>{
+        return listings.push({
+          id: doc.id,
+          data: doc.data(),
+        });
+       });
+       setListings(listings);
+       setLoading(false);
+    }
+    fetchUserListings();
+  },[auth.currentUser.uid])
   return (
     <>
       <section className="max-w-6xl mx-auto flex justify-center flex-col">
@@ -92,6 +115,22 @@ export default function Profile() {
           </button>
           </div>
       </section>
+      <div className="max-w-6xl px-3 mt-6 mx-auto">
+        {!loading && listings.length > 0 && (
+          <>
+            <h2 className="text-2xl text-center font-semibold mb-6"> My Listings</h2>
+            <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4
+            2xl-grid-cols-5 mt-6 mb-6">
+              {listings.map((listing)=>(
+                  <ListingItem key={listing.id} id={listing.id} listing={listing.data}/>
+                ))
+              }
+            </ul>
+          </>
+
+        )}
+
+      </div>
     </>
   )
 }

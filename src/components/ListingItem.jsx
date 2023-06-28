@@ -9,7 +9,7 @@ export default function ListingItem({listing, id, onEdit, onDelete}) {
     <li className="relative bg-white flex flex-col justify-between items-center shadow-md hover:shadow-xl
     rounded-md overflow-hidden transition-shadow duration-150 m-[10px]">
       <Link className="contents" to={`/category/${listing.type}/${id}`}>
-        <img className="h-[170px] w-full object-cover hover:scale-105 transition-scale
+        <img alt="coverImage" className="h-[170px] w-full object-cover hover:scale-105 transition-scale
         duration-150 ease-in" loading="lazy" src={listing.imgUrls[0]} />
         <Moment fromNow className="absolute top-2 left-2 bg-[#3377cc] text-white uppercase
         text-xs font-semibold rounded-md px-2 py-1 shadow-lg" >
@@ -21,7 +21,8 @@ export default function ListingItem({listing, id, onEdit, onDelete}) {
             <p className="font-semibold text-sm md-[2px] text-gray-600 truncate">{listing.address}</p>
           </div>
           <p className="font-semibold m-0 text-lg">{listing.name}</p>
-          <p className="text-[#457b9d] mt-2 font-semibold">${listing.offer ? listing.discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          <p className="text-[#457b9d] mt-2 font-semibold">
+            ${listing.offer ? listing.discountedPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 : listing.regularPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
               {listing.type === "rent" && " / month"}
           </p>

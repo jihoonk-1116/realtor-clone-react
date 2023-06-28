@@ -11,26 +11,28 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/EditListing";
+import Listing from "./pages/Listing"
 function App() {
   return (
     <>
       <Router>
-        <Header></Header> 
+        <Header/>
         <Routes>
           <Route path="/" element={<Home/>}></Route>
-          <Route path="/profile" element={<PrivateRoute/>}>
-            <Route path="/profile" element={<Profile/>}/>
-          </Route>
-          <Route path="/sign-up" element={<SignUp/>}></Route>
-          <Route path="/sign-in" element={<SignIn/>}></Route>
-          <Route path="/forgot-password" element={<ForgotPassword/>}></Route>
-          <Route path="/offers" element={<Offers/>}></Route>
-          <Route path="/create-listing" element={<PrivateRoute/>}>
-            <Route path="/create-listing" element={<CreateListing/>}/>
-          </Route>
-          <Route path="/edit-listing" element={<PrivateRoute/>}>
-            <Route path="/edit-listing/:listingId" element={<EditListing/>}/>
-          </Route>
+            <Route path="/profile" element={<PrivateRoute/>}>
+              <Route path="/profile" element={<Profile/>}/>
+            </Route>
+            <Route path="/sign-up" element={<SignUp/>}></Route>
+            <Route path="/sign-in" element={<SignIn/>}></Route>
+            <Route path="/forgot-password" element={<ForgotPassword/>}></Route>
+            <Route path="/offers" element={<Offers/>}></Route>
+            <Route path="/category/:categoryName/:listingId" element={<Listing/>}></Route>
+            <Route path="/create-listing" element={<PrivateRoute/>}>
+              <Route path="/create-listing" element={<CreateListing/>}/>
+            </Route>
+            <Route path="/edit-listing" element={<PrivateRoute/>}>
+              <Route path="/edit-listing/:listingId" element={<EditListing/>}/>
+            </Route>
         </Routes>
       </Router>
       <ToastContainer
